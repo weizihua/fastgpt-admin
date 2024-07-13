@@ -1,0 +1,28 @@
+services:
+  fastgpt-admin:
+    image: fastgpt-admin:v1.2.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastgpt-admin
+    ports:
+      - "30003:3001"
+    restart: unless-stopped
+    environment:
+      MONGODB_URI: "mongodb://myusername:mypassword@172.22.220.89:27017/fastgpt?authSource=admin&directConnection=true"
+      MONGODB_NAME: "fastgpt"
+      ADMIN_USER: "root"
+      ADMIN_PASS: "1234"
+      ADMIN_SECRET: "fastgpt"
+      PARENT_URL: "http://172.22.220.89:3000/"  # FastGpt服务的地址
+      PARENT_ROOT_KEY: "root_key"  # FastGpt的rootkey
+      VITE_PUBLIC_SERVER_URL: "http://172.22.220.89:30003"  # 和server.js一致
+    volumes:
+      - logs:/logs
+
+volumes:
+  logs:
+
+networks:
+  default:
+    driver: bridge
